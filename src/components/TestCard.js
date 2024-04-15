@@ -5,8 +5,10 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import CreateTest from './CreateTest';
+import QuestionsPage from './QuestionsPage';
 
-export default function TestCard({testname, duration, id, setArr, setOpen, setId}) {
+export default function TestCard({testname, duration, id, setTestId, setShowQuestionPage}) {
 
 const remove=(id)=>{
 //   console.log(id.id);
@@ -24,9 +26,15 @@ const handleEdit=()=>{
 //   setId(id);
 }
 
+const handleTest=(e)=>{
+  console.log("clicked on testcard");
+setTestId(e);
+setShowQuestionPage(true);
+}
+
 
   return (
-    <Card sx={{ maxWidth: "100vw" }} style={{height:"100%", maxHeight:"100%", overflow:"auto"}}>
+    <Card sx={{ maxWidth: "100vw" }} style={{height:"100%", maxHeight:"100%", overflow:"auto"}} onClick={()=>handleTest({id})}>
       {/* <CardMedia
         sx={{ height: 140 }}
         image={image}
