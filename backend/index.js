@@ -6,24 +6,12 @@ const cors= require("cors");
 
 const app= express();
 
-app.use(
-    cors({
-      origin: "*", // use your actual domain name (or localhost), using * is not recommended
-      methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
-      allowedHeaders: [
-        "Content-Type",
-        "Origin",
-        "X-Requested-With",
-        "Accept",
-        "x-client-key",
-        "x-client-token",
-        "x-client-secret",
-        "Authorization",
-        "token",
-      ],
-      credentials: true,
-    })
-  );
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next();
+});
 
 mongoose
   .connect(
@@ -113,13 +101,13 @@ try{
   });
 
   app.put("/admin/addquestion", async (req, res)=>{
-    const {statement, option1, option2, option3, option4}= req.body;
+    const {statement, option1, option2, option3, option4, correctOption}= req.body;
     const test= await Test.findOne({_id: req.headers.id});
 
     
 
     const {testname, duration, questions}= test;
-    const updatedarray=[...questions,{statement, option1, option2, option3, option4, id: Math.random()*100} ];
+    const updatedarray=[...questions,{statement, option1, option2, option3, option4,correctOption, id: Math.random()*100} ];
     
    const updatedtest= await Test.findOneAndUpdate({_id: req.headers.id}, {
             testname, duration,questions: updatedarray

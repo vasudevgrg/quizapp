@@ -7,6 +7,15 @@ const CreateTest = ({setOpen}) => {
     const [duration, setDuration]= useState();
     const [id, setId]= useState("");
 
+    const [statement, setStatement]= useState("");
+    const [option1, setOption1]= useState("");
+    const [option2, setOption2]= useState("");
+    const [option3, setOption3]= useState("");
+    const [option4, setOption4]= useState("");
+    const [correctOption, setCorrectOption]= useState("");
+
+    const [value, setValue]= useState("");
+
     const handleQuestions=()=>{
         fetch("http://localhost:5002/admin/createtest", {
             method:"POST",
@@ -19,12 +28,28 @@ const CreateTest = ({setOpen}) => {
                 "duration": duration,
                 "questions": []
             })
-        }).then(e=>e.josn()).then(e=>console.log(e));
+        }).then(e=>e.json()).then(e=>{console.log(e); setId(e.id)});
         setOpenform(true);
     };
 
     const addQuestion=()=>{
-        
+        fetch("http://localhost:5002/admin/addquestion", {
+            method:"PUT",
+            headers:{
+                'Content-Type':'application/json',
+                "id":id
+            },
+            body:JSON.stringify({
+                "statement": statement,
+                "option1":option1,
+                "option2":option2,
+                "option3":option3,
+                "option4": option4,
+                "correctoption":correctOption
+            })
+        });
+
+        setValue("");
     }
   return (
    <>
@@ -40,16 +65,18 @@ const CreateTest = ({setOpen}) => {
 {
     openform && <>
     <label>Type Question Name</label>
-    <input/>
+    <input onChange={e=>setStatement(e.target.value)} defaultValue={value}/>
     <label>FillOptions</label>
     <label>Option1</label>
-    <input/>
+    <input onChange={e=>setOption1(e.target.value)} defaultValue={value}/>
     <label>Option2</label>
-    <input/>
+    <input onChange={e=>setOption2(e.target.value)} defaultValue={value}/>
     <label>Option3</label>
-    <input/>
+    <input onChange={e=>setOption3(e.target.value)} defaultValue={value}/>
     <label>Option4</label>
-    <input/>
+    <input onChange={e=>setOption4(e.target.value)} defaultValue={value}/>
+    <label>Correct option</label>
+    <input onChange={e=>setCorrectOption(e.target.value)} defaultValue={value}/>
     
     <button onClick={addQuestion}>Save Question</button>
     </>

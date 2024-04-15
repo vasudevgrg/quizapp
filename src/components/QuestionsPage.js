@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Navbar from './Navbar'
+import Question from './Question';
 
 const QuestionsPage = ({id}) => {
 const [ques, setQues]= useState([]);
@@ -19,11 +20,7 @@ useEffect(()=>{
 
 {
   ques.map((e)=><><div>
-    <h3>{e.statement}</h3>
-    a. {e.option1} <br/>
-    b. {e.option2}<br/>
-    c. {e.option3}<br/>
-    d. {e.option4}
+    <Question  statement={e.statement} option1={e.option1} option2= {e.option2} option3={e.option3} option4= {e.option4} />
     </div></>)
 }
    </>
