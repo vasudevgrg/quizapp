@@ -45,7 +45,7 @@ const CreateTest = ({setOpen}) => {
                 "option2":option2,
                 "option3":option3,
                 "option4": option4,
-                "correctoption":correctOption
+                "correctOption":correctOption
             })
         });
 

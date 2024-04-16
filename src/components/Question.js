@@ -6,8 +6,9 @@ import FormControl from '@mui/material/FormControl';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
 import Button from '@mui/material/Button';
+import { Label } from '@mui/icons-material';
 
-export default function Question({statement, option1, option2, option3, option4}) {
+export default function Question({id,idx,statement, option1, option2, option3, option4, correctOption, setAttempted, setCorrect, attempted, correct}) {
   const [value, setValue] = React.useState('');
   const [error, setError] = React.useState(false);
   const [helperText, setHelperText] = React.useState('Choose wisely');
@@ -21,11 +22,14 @@ export default function Question({statement, option1, option2, option3, option4}
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    if (value === 'best') {
+    if (value === correctOption) {
       setHelperText('You got it!');
+      setAttempted([...attempted, {"id": id, "correct": true}]);
+
       setError(false);
-    } else if (value === 'worst') {
+    } else if (value != correctOption) {
       setHelperText('Sorry, wrong answer!');
+      setAttempted([...attempted, {"id": id, "correct": false}]);
       setError(true);
     } else {
       setHelperText('Please select an option.');
@@ -36,6 +40,7 @@ export default function Question({statement, option1, option2, option3, option4}
   return (
     <form onSubmit={handleSubmit}>
       <FormControl sx={{ m: 3 }} error={error} variant="standard">
+        <Label>Question {idx+1}</Label>
         <FormLabel id="demo-error-radios"> {statement}</FormLabel>
         <RadioGroup
           aria-labelledby="demo-error-radios"

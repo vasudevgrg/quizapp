@@ -5,13 +5,24 @@ const cors= require("cors");
 
 
 const app= express();
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  next();
-});
+app.use(
+  cors({
+    origin: "*", // use your actual domain name (or localhost), using * is not recommended
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Origin",
+      "X-Requested-With",
+      "Accept",
+      "x-client-key",
+      "x-client-token",
+      "x-client-secret",
+      "Authorization",
+      "token",
+    ],
+    credentials: true,
+  })
+);
 
 mongoose
   .connect(
@@ -40,7 +51,7 @@ const secret= "secret";
 let Admin= mongoose.model("Admin", admin);
 let Test= mongoose.model("Test", test);
 
-app.use(express.json());
+
 
 const authenticate = (req, res, next) => {
     jwt.verify(req.headers.token, secret, (err, decoded) => {
@@ -107,7 +118,7 @@ try{
     
 
     const {testname, duration, questions}= test;
-    const updatedarray=[...questions,{statement, option1, option2, option3, option4,correctOption, id: Math.random()*100} ];
+    const updatedarray=[...`questions`,{statement, option1, option2, option3, option4,correctOption, id: Math.random()*100} ];
     
    const updatedtest= await Test.findOneAndUpdate({_id: req.headers.id}, {
             testname, duration,questions: updatedarray
